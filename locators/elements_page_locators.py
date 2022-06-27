@@ -29,3 +29,21 @@ class RadioButtonPageLocators:
     RADIO_IMPRESSIVE = (By.XPATH, '//label[@for="impressiveRadio"]')
     SELECTED_RADIO = (By.CSS_SELECTOR, 'span[class="text-success"]')
 
+
+class WebTablePageLocators:
+    # add person form
+    ADD_BUTTON = (By.ID, 'addNewRecordButton')
+    FIRSTNAME_INPUT = (By.ID, 'firstName')
+    LASTNAME_INPUT = (By.ID, 'lastName')
+    EMAIL_INPUT = (By.ID, 'userEmail')
+    AGE_INPUT = (By.ID, 'age')
+    SALARY_INPUT = (By.ID, 'salary')
+    DEPARTMENT_INPUT = (By.ID, 'department')
+    SUBMIT = (By.ID, 'submit')
+
+    # tables
+    FULL_PEOPLE_LIST = (By.XPATH, '//div[@class="rt-tr-group"]')
+    SEARCH_INPUT = (By.ID, 'searchBox')
+    DELETE_BUTTON = (By.CSS_SELECTOR, 'span[title="Delete"]')
+    ROW_PARENT = './/ancestor::div[@class="rt-tr-group"]'
+

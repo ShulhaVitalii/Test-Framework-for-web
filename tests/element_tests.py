@@ -1,6 +1,7 @@
+import random
 import time
 
-from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage
+from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage, WebTablePage
 
 
 class TestElements:
@@ -30,3 +31,18 @@ class TestElements:
             radio_button_page.click_on_yes_radio()
             radio_button_page.click_on_impressive_radio()
             radio_button_page.click_on_no_radio()
+
+    class TestWebTable:
+        def test_web_table_add_person(self, driver):
+            web_table_page = WebTablePage(driver, 'https://demoqa.com/webtables')
+            web_table_page.open()
+            web_table_page.checking_that_new_person_is_in_table()
+            time.sleep(5)
+
+        def test_web_table_search_person(self, driver):
+            web_table_page = WebTablePage(driver, 'https://demoqa.com/webtables')
+            web_table_page.open()
+            key = web_table_page.new_person()[random.randint(0, 5)]
+            web_table_page.search_some_person(key)
+            table_result = web_table_page.check_search_person()
+            assert key in table_result, f'Key {key} is not found in the table'

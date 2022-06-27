@@ -2,7 +2,8 @@ import random
 import time
 from selenium.webdriver.common.by import By
 from generator.generator import generated_person
-from locators.elements_page_locators import TextBoxPageLocators, CheckBoxPageLocators, RadioButtonPageLocators
+from locators.elements_page_locators import TextBoxPageLocators, CheckBoxPageLocators, RadioButtonPageLocators, \
+    WebTablePageLocators
 from pages.base_page import BasePage
 
 
@@ -82,3 +83,49 @@ class RadioButtonPage(BasePage):
     def click_on_no_radio(self):
         self.element_is_clickable(self.locators.RADIO_NO).click()
         assert self.element_is_present(self.locators.SELECTED_RADIO).text == 'No', 'radio No is not active'
+
+
+class WebTablePage(BasePage):
+    locators = WebTablePageLocators()
+
+    def new_person(self):
+        count = 1
+        while count != 0:
+            person_info = next(generated_person())
+            firstname = person_info.firstname
+            lastname = person_info.lastname
+            email = person_info.email
+            age = person_info.age
+            salary = person_info.salary
+            department = person_info.department
+
+            self.element_is_visible(self.locators.ADD_BUTTON).click()
+            self.element_is_visible(self.locators.FIRSTNAME_INPUT).send_keys(firstname)
+            self.element_is_visible(self.locators.LASTNAME_INPUT).send_keys(lastname)
+            self.element_is_visible(self.locators.EMAIL_INPUT).send_keys(email)
+            self.element_is_visible(self.locators.AGE_INPUT).send_keys(age)
+            self.element_is_visible(self.locators.SALARY_INPUT).send_keys(salary)
+            self.element_is_visible(self.locators.DEPARTMENT_INPUT).send_keys(department)
+
+            self.element_is_visible(self.locators.SUBMIT).click()
+
+            count -= 1
+            return [firstname, lastname, str(age), email, str(salary), department]
+
+    def check_new_person(self):
+        person_list = self.element_are_present(self.locators.FULL_PEOPLE_LIST)
+        data = []
+        for item in person_list:
+            data.append(item.text.splitlines())
+        return data
+
+    def checking_that_new_person_is_in_table(self):
+        assert self.new_person() in self.check_new_person()
+
+    def search_some_person(self, key):
+        self.element_is_visible(self.locators.SEARCH_INPUT).send_keys(key)
+
+    def check_search_person(self):
+        delete_button = self.element_are_present(self.locators.DELETE_BUTTON)
+        row = delete_button[0].find_element(By.XPATH, self.locators.ROW_PARENT)
+        return row.text.splitlines()
