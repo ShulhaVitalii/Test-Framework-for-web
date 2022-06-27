@@ -2,7 +2,7 @@ import random
 import time
 from selenium.webdriver.common.by import By
 from generator.generator import generated_person
-from locators.elements_page_locators import TextBoxPageLocators, CheckBoxPageLocators
+from locators.elements_page_locators import TextBoxPageLocators, CheckBoxPageLocators, RadioButtonPageLocators
 from pages.base_page import BasePage
 
 
@@ -65,3 +65,20 @@ class CheckBoxPage(BasePage):
     def check_result(self):
         checked, outputs = self.get_checked_checkboxes(), self.get_output_result()
         assert checked == outputs, f'list {checked} and {outputs} are not equal'
+
+
+class RadioButtonPage(BasePage):
+    locators = RadioButtonPageLocators()
+
+    def click_on_yes_radio(self):
+        self.element_is_clickable(self.locators.RADIO_YES).click()
+        assert self.element_is_present(self.locators.SELECTED_RADIO).text == 'Yes', 'radio Yes is not active'
+
+    def click_on_impressive_radio(self):
+        self.element_is_clickable(self.locators.RADIO_IMPRESSIVE).click()
+        assert self.element_is_present(self.locators.SELECTED_RADIO).text == 'Impressive',\
+            'radio impressive is not active'
+
+    def click_on_no_radio(self):
+        self.element_is_clickable(self.locators.RADIO_NO).click()
+        assert self.element_is_present(self.locators.SELECTED_RADIO).text == 'No', 'radio No is not active'
