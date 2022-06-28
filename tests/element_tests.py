@@ -1,7 +1,10 @@
 import random
 import time
 
-from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage, WebTablePage, ButtonsPage
+import pytest
+
+from locators.elements_page_locators import LinksPageLocators
+from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage, WebTablePage, ButtonsPage, LinksPage
 
 
 class TestElements:
@@ -77,3 +80,22 @@ class TestElements:
             button_page = ButtonsPage(driver, 'https://demoqa.com/buttons')
             button_page.open()
             button_page.click_on_the_buttons()
+
+    class TestLinks:
+        @pytest.mark.parametrize('link', [LinksPageLocators.LINK_HOME, LinksPageLocators.DYNAMIC_LINK])
+        def test_new_page_open_after_click_on_link(self, driver, link):
+            links_page = LinksPage(driver, 'https://demoqa.com/links')
+            links_page.open()
+            links_page.check_that_new_page_is_opened(link)
+
+        @pytest.mark.parametrize('link, code, text', [(LinksPageLocators.LINK_CREATE, 201, 'Created'),
+                                                      (LinksPageLocators.LINK_NO_CONTENT, 204, 'No Content'),
+                                                      (LinksPageLocators.LINK_MOVED, 301, 'Moved Permanently'),
+                                                      (LinksPageLocators.LINK_BAD_REQUEST, 400, 'Bad Request'),
+                                                      (LinksPageLocators.LINK_UNAUTHORIZED, 401, 'Unauthorized'),
+                                                      (LinksPageLocators.LINK_FORBIDDEN, 403, 'Forbidden'),
+                                                      (LinksPageLocators.LINK_NO_FOUND, 404, 'Not Found')])
+        def test_api_call_send_correct(self, driver, link, code, text):
+            links_page = LinksPage(driver, 'https://demoqa.com/links')
+            links_page.open()
+            links_page.check_api_call(link, code, text)

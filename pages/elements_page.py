@@ -1,11 +1,12 @@
 import random
 import time
 
+import requests
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from generator.generator import generated_person
 from locators.elements_page_locators import TextBoxPageLocators, CheckBoxPageLocators, RadioButtonPageLocators, \
-    WebTablePageLocators, ButtonsPageLocators
+    WebTablePageLocators, ButtonsPageLocators, LinksPageLocators
 from pages.base_page import BasePage
 
 
@@ -183,3 +184,22 @@ class ButtonsPage(BasePage):
 
     def check_clicked_on_the_button(self, element):
         return self.element_is_present(element).text
+
+
+class LinksPage(BasePage):
+    locators = LinksPageLocators()
+
+    def check_that_new_page_is_opened(self, locator):
+        link = self.element_is_visible(locator)
+        link_href = link.get_attribute('href')
+        request = requests.get(link_href)
+        if request.status_code == 200:
+            link.click()
+        self.switch_to_new_tab()
+        assert self.driver.current_url == link_href
+
+    def check_api_call(self, locator, code, text):
+        self.element_is_visible(locator).click()
+        assert self.element_is_visible(self.locators.RESPONSE).text == f'Link has responded with ' \
+                                                                       f'staus {code} and status text {text}'
+

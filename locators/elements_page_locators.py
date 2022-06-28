@@ -62,3 +62,22 @@ class ButtonsPageLocators:
     RIGHT_CLICK_MESSAGE = (By.ID, 'rightClickMessage')
     DYNAMIC_CLICK_MESSAGE = (By.ID, 'dynamicClickMessage')
 
+
+class LinksPageLocators:
+    # Following links will open new tab
+    LINK_HOME = (By.ID, 'simpleLink')
+    DYNAMIC_LINK = (By.ID, 'dynamicLink')
+
+    # Following links will send an api call
+    LINK_CREATE = (By.ID, 'created')
+    LINK_NO_CONTENT = (By.ID, 'no-content')
+    LINK_MOVED = (By.ID, 'moved')
+    LINK_BAD_REQUEST = (By.ID, 'bad-request')
+    LINK_UNAUTHORIZED = (By.ID, 'unauthorized')
+    LINK_FORBIDDEN = (By.ID, 'forbidden')
+    LINK_NO_FOUND = (By.ID, 'invalid-url')
+
+    # Output
+    RESPONSE = (By.ID, 'linkResponse')
+
+
