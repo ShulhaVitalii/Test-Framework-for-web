@@ -5,7 +5,7 @@ import pytest
 
 from locators.elements_page_locators import LinksPageLocators
 from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage, WebTablePage, ButtonsPage, LinksPage, \
-    UploadDownloadPage
+    UploadDownloadPage, DynamicPropertiesPage
 
 
 class TestElements:
@@ -111,3 +111,19 @@ class TestElements:
             download_page = UploadDownloadPage(driver, 'https://demoqa.com/upload-download')
             download_page.open()
             download_page.download_file()
+
+    class TestDynamicProperties:
+        def test_enable_button_after_5_seconds(self, driver):
+            dynamic_properties = DynamicPropertiesPage(driver, 'https://demoqa.com/dynamic-properties')
+            dynamic_properties.open()
+            assert dynamic_properties.check_that_button_is_enabled() is True, 'The button is not enabled'
+
+        def test_button_change_color_after_5_seconds(self, driver):
+            dynamic_properties = DynamicPropertiesPage(driver, 'https://demoqa.com/dynamic-properties')
+            dynamic_properties.open()
+            dynamic_properties.check_change_of_color()
+
+        def test_button_appear(self, driver):
+            dynamic_properties = DynamicPropertiesPage(driver, 'https://demoqa.com/dynamic-properties')
+            dynamic_properties.open()
+            assert dynamic_properties.check_button_appear() is True, 'The button is not appear'

@@ -86,3 +86,9 @@ class UploadDownloadPageLocators:
     UPLOAD_BUTTON = (By.ID, 'uploadFile')
     UPLOADED_FILE_PATH = (By.ID, 'uploadedFilePath')
 
+
+class DynamicPropertiesPageLocators:
+    COLOR_CHANGED_BUTTON = (By.ID, 'colorChange')
+    VISIBLE_AFTER_BUTTON = (By.ID, 'visibleAfter')
+    ENABLED_AFTER_BUTTON = (By.ID, 'enableAfter')
+
