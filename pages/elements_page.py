@@ -1,9 +1,11 @@
 import random
 import time
+
+from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from generator.generator import generated_person
 from locators.elements_page_locators import TextBoxPageLocators, CheckBoxPageLocators, RadioButtonPageLocators, \
-    WebTablePageLocators
+    WebTablePageLocators, ButtonsPageLocators
 from pages.base_page import BasePage
 
 
@@ -161,4 +163,23 @@ class WebTablePage(BasePage):
         return len(rows_list)
 
 
+class ButtonsPage(BasePage):
+    locators = ButtonsPageLocators()
 
+    def click_on_the_buttons(self):
+        button_double_click = self.element_is_visible(self.locators.BUTTON_DOUBLE_CLICK_ME)
+        self.action_double_click(button_double_click)
+        text = self.check_clicked_on_the_button(self.locators.DOUBLE_CLICK_MESSAGE)
+        assert text == 'You have done a double click', 'You have not done a double click'
+
+        button_right_click = self.element_is_visible(self.locators.BUTTON_RIGHT_CLICK_ME)
+        self.action_right_click(button_right_click)
+        text = self.check_clicked_on_the_button(self.locators.RIGHT_CLICK_MESSAGE)
+        assert text == 'You have done a right click', 'You have not done a right click'
+
+        self.element_is_visible(self.locators.BUTTON_CLICK_ME).click()
+        text = self.check_clicked_on_the_button(self.locators.DYNAMIC_CLICK_MESSAGE)
+        assert text == 'You have done a dynamic click', 'You have not done a dynamic click'
+
+    def check_clicked_on_the_button(self, element):
+        return self.element_is_present(element).text
