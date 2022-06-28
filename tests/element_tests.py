@@ -4,7 +4,8 @@ import time
 import pytest
 
 from locators.elements_page_locators import LinksPageLocators
-from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage, WebTablePage, ButtonsPage, LinksPage
+from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage, WebTablePage, ButtonsPage, LinksPage, \
+    UploadDownloadPage
 
 
 class TestElements:
@@ -99,3 +100,14 @@ class TestElements:
             links_page = LinksPage(driver, 'https://demoqa.com/links')
             links_page.open()
             links_page.check_api_call(link, code, text)
+
+    class TestUploadDownload:
+        def test_upload(self, driver):
+            upload_page = UploadDownloadPage(driver, 'https://demoqa.com/upload-download')
+            upload_page.open()
+            upload_page.upload_file()
+
+        def test_download(self, driver):
+            download_page = UploadDownloadPage(driver, 'https://demoqa.com/upload-download')
+            download_page.open()
+            download_page.download_file()

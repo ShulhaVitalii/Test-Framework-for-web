@@ -81,3 +81,8 @@ class LinksPageLocators:
     RESPONSE = (By.ID, 'linkResponse')
 
 
+class UploadDownloadPageLocators:
+    DOWNLOAD_BUTTON = (By.ID, 'downloadButton')
+    UPLOAD_BUTTON = (By.ID, 'uploadFile')
+    UPLOADED_FILE_PATH = (By.ID, 'uploadedFilePath')
+

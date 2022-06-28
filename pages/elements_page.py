@@ -1,12 +1,14 @@
+import base64
+import os
 import random
 import time
 
 import requests
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
-from generator.generator import generated_person
+from generator.generator import generated_person, generated_file
 from locators.elements_page_locators import TextBoxPageLocators, CheckBoxPageLocators, RadioButtonPageLocators, \
-    WebTablePageLocators, ButtonsPageLocators, LinksPageLocators
+    WebTablePageLocators, ButtonsPageLocators, LinksPageLocators, UploadDownloadPageLocators
 from pages.base_page import BasePage
 
 
@@ -201,5 +203,28 @@ class LinksPage(BasePage):
     def check_api_call(self, locator, code, text):
         self.element_is_visible(locator).click()
         assert self.element_is_visible(self.locators.RESPONSE).text == f'Link has responded with ' \
-                                                                       f'staus {code} and status text {text}'
+                                                                       f'status {code} and status text {text}'
 
+
+class UploadDownloadPage(BasePage):
+    locators = UploadDownloadPageLocators()
+
+    def upload_file(self):
+        file_name, path = generated_file()
+        self.element_is_present(self.locators.UPLOAD_BUTTON).send_keys(path)
+        os.remove(path)
+        text_after_upload = self.element_is_present(self.locators.UPLOADED_FILE_PATH).text
+        assert text_after_upload == rf'C:\fakepath\{file_name}', 'The file has ho been upload'
+
+    def download_file(self):
+        link = self.element_is_present(self.locators.DOWNLOAD_BUTTON).get_attribute('href')
+        print(link)
+        link = base64.b64decode(link)
+        path = rf'D:\Test-Framework-for-web\img{random.randint(1, 999)}.jpg'
+        with open(path, 'wb+') as f:
+            offset = link.find(b'\xff\xd8')
+            f.write(link[offset:])
+            check_file = os.path.exists(path)
+            f.close()
+        os.remove(path)
+        assert check_file is True, 'The file has ho been download'

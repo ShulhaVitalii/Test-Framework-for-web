@@ -19,3 +19,11 @@ def generated_person():
         current_address=faker_en.address(),
         permanent_address=faker_en.address()
     )
+
+
+def generated_file():
+    path = rf'D:\Test-Framework-for-web\filetest{random.randint(1,999)}'
+    file = open(path, 'w')
+    file.write('Test Test')
+    file.close()
+    return path.split('\\')[-1], path
