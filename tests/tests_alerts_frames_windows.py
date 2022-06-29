@@ -1,4 +1,4 @@
-from pages.alerts_framed_windows_page import BrowserWindowsPage, AlertPage, FramesPage
+from pages.alerts_framed_windows_page import BrowserWindowsPage, AlertPage, FramesPage, NestedFramesPage
 
 
 class TestAlertsFramesWindows:
@@ -48,3 +48,12 @@ class TestAlertsFramesWindows:
             frames_page.open()
             frames_page.check_frame('frame1')
             frames_page.check_frame('frame2')
+
+    class TestNestedFramesPage:
+
+        def test_nested_frames(self, driver):
+            nested_frame_page = NestedFramesPage(driver, 'https://demoqa.com/nestedframes')
+            nested_frame_page.open()
+            nested_frame_page.check_nested_frame('frame1')
+            nested_frame_page.check_nested_frame('frame2')
+

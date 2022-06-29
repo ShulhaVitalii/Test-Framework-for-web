@@ -4,7 +4,7 @@ from selenium.common import UnexpectedAlertPresentException
 from selenium.webdriver.common.alert import Alert
 
 from locators.alerts_framed_windows_page_locators import BrowserWindowsPageLocators, AlertPageLocators, \
-    FramesPageLocators
+    FramesPageLocators, NestedFramesPageLocators
 from pages.base_page import BasePage
 
 
@@ -90,3 +90,29 @@ class FramesPage(BasePage):
             assert width == '100px', 'The frame does not exist'
             assert height == '100px', 'The frame does not exist'
             assert text == 'This is a sample page', 'The frame does not exist'
+
+
+class NestedFramesPage(BasePage):
+    locators = NestedFramesPageLocators()
+
+    def check_nested_frame(self, frame_num):
+        if frame_num == 'frame1':
+            frame = self.element_is_present(self.locators.FRAME1)
+            width = frame.get_attribute('width')
+            height = frame.get_attribute('height')
+            self.driver.switch_to.frame(frame)
+            text = self.element_is_present(self.locators.FRAME_TEXT).text
+            assert width == '500px', 'The frame does not exist'
+            assert height == '350px', 'The frame does not exist'
+            assert text == 'Parent frame', 'The frame does not exist'
+
+        if frame_num == 'frame2':
+            frame = self.element_is_present(self.locators.FRAME2)
+            width = frame.get_attribute('width')
+            height = frame.get_attribute('height')
+            self.driver.switch_to.frame(frame)
+            text = self.element_is_present(self.locators.FRAME_TEXT).text
+            self.driver.switch_to.default_content()
+            assert width == '', 'The frame does not exist'
+            assert height == '', 'The frame does not exist'
+            assert text == 'Child Iframe', 'The frame does not exist'

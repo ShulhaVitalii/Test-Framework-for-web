@@ -24,3 +24,9 @@ class FramesPageLocators:
     FRAME1 = (By.ID, 'frame1')
     FRAME2 = (By.ID, 'frame2')
     TITLE_FRAME = (By.ID, 'sampleHeading')
+
+
+class NestedFramesPageLocators:
+    FRAME1 = (By.ID, 'frame1')
+    FRAME2 = (By.XPATH, '// iframe[@srcdoc="<p>Child Iframe</p>"]')
+    FRAME_TEXT = (By.TAG_NAME, 'body')
