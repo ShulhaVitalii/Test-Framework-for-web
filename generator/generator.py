@@ -12,6 +12,10 @@ def generated_person():
         full_name=f'{faker_en.first_name()} {faker_en.last_name()}',
         firstname=faker_en.first_name(),
         lastname=faker_en.last_name(),
+        date_of_birth=random.choice(['29 Jun 1990', '02 Jun 2000']),
+        gender=random.randint(0, 2),
+        hobbies=random.randint(0, 2),
+        mobile_number=f'38093{"".join(str(random.randint(0, 9)) for _ in range(5))}',
         age=random.randint(10, 80),
         salary=random.randint(10000, 50000),
         department=random.choice(['department1', 'department2', 'department3', 'department4', 'department5']),
@@ -27,3 +31,9 @@ def generated_file():
     file.write('Test Test')
     file.close()
     return path.split('\\')[-1], path
+
+
+def generate_subject_list():
+    subjects = ["Hindi", "English", "Maths", "Physics", "Chemistry", "Biology", "Computer Science", "Commerce",
+                "Accounting", "Economics", "Arts", "Social Studies", "History", "Civics"]
+    return [random.choice(subjects) for _ in range(3)]
