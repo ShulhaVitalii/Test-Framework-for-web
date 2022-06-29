@@ -19,3 +19,8 @@ class AlertPageLocators:
     BUTTON_TO_PROMPT_BOX_WILL_APPEAR = (By.ID, 'promtButton')
     PROMPT_RESULT = (By.ID, 'promptResult')
 
+
+class FramesPageLocators:
+    FRAME1 = (By.ID, 'frame1')
+    FRAME2 = (By.ID, 'frame2')
+    TITLE_FRAME = (By.ID, 'sampleHeading')

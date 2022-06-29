@@ -3,7 +3,8 @@ import time
 from selenium.common import UnexpectedAlertPresentException
 from selenium.webdriver.common.alert import Alert
 
-from locators.alerts_framed_windows_page_locators import BrowserWindowsPageLocators, AlertPageLocators
+from locators.alerts_framed_windows_page_locators import BrowserWindowsPageLocators, AlertPageLocators, \
+    FramesPageLocators
 from pages.base_page import BasePage
 
 
@@ -62,3 +63,30 @@ class AlertPage(BasePage):
             assert 'MyName' in self.element_is_visible(self.locators.PROMPT_RESULT).text
         except UnexpectedAlertPresentException:
             assert 'MyName' in self.element_is_visible(self.locators.PROMPT_RESULT).text
+
+
+class FramesPage(BasePage):
+    locators = FramesPageLocators()
+
+    def check_frame(self, frame_num):
+        if frame_num == 'frame1':
+            frame = self.element_is_present(self.locators.FRAME1)
+            width = frame.get_attribute('width')
+            height = frame.get_attribute('height')
+            self.driver.switch_to.frame(frame)
+            text = self.element_is_present(self.locators.TITLE_FRAME).text
+            self.driver.switch_to.default_content()
+            assert width == '500px', 'The frame does not exist'
+            assert height == '350px', 'The frame does not exist'
+            assert text == 'This is a sample page', 'The frame does not exist'
+
+        if frame_num == 'frame2':
+            frame = self.element_is_present(self.locators.FRAME2)
+            width = frame.get_attribute('width')
+            height = frame.get_attribute('height')
+            self.driver.switch_to.frame(frame)
+            text = self.element_is_present(self.locators.TITLE_FRAME).text
+            self.driver.switch_to.default_content()
+            assert width == '100px', 'The frame does not exist'
+            assert height == '100px', 'The frame does not exist'
+            assert text == 'This is a sample page', 'The frame does not exist'

@@ -1,4 +1,4 @@
-from pages.alerts_framed_windows_page import BrowserWindowsPage, AlertPage
+from pages.alerts_framed_windows_page import BrowserWindowsPage, AlertPage, FramesPage
 
 
 class TestAlertsFramesWindows:
@@ -40,3 +40,11 @@ class TestAlertsFramesWindows:
             alert_page = AlertPage(driver, 'https://demoqa.com/alerts')
             alert_page.open()
             alert_page.check_prompt_alert()
+
+    class TestFramesPage:
+
+        def test_frames(self, driver):
+            frames_page = FramesPage(driver, 'https://demoqa.com/frames')
+            frames_page.open()
+            frames_page.check_frame('frame1')
+            frames_page.check_frame('frame2')
