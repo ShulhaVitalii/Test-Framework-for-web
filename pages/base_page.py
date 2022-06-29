@@ -50,3 +50,8 @@ class BasePage:
         self.driver.execute_script("document.getElementById('close-fixedban').remove();")
         self.driver.execute_script("document.getElementById('adplus-anchor').remove();")
 
+    def check_new_tab(self, locator1, locator2):
+        self.element_is_visible(locator1).click()
+        self.driver.switch_to.window(self.driver.window_handles[1])
+        text = self.element_is_visible(locator2).text
+        return text
