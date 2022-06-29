@@ -1,4 +1,4 @@
-from pages.alerts_framed_windows_page import BrowserWindowsPage
+from pages.alerts_framed_windows_page import BrowserWindowsPage, AlertPage
 
 
 class TestAlertsFramesWindows:
@@ -19,3 +19,24 @@ class TestAlertsFramesWindows:
             browser_windows.open()
             pass
 
+    class TestAlertPage:
+
+        def test_see_alert(self, driver):
+            alert_page = AlertPage(driver, 'https://demoqa.com/alerts')
+            alert_page.open()
+            alert_page.check_see_alert()
+
+        def test_see_alert_after_5_second(self, driver):
+            alert_page = AlertPage(driver, 'https://demoqa.com/alerts')
+            alert_page.open()
+            alert_page.check_see_alert_after_5_second()
+
+        def test_confirm_alert(self, driver):
+            alert_page = AlertPage(driver, 'https://demoqa.com/alerts')
+            alert_page.open()
+            alert_page.check_confirm_alert()
+
+        def test_prompt_alert(self, driver):
+            alert_page = AlertPage(driver, 'https://demoqa.com/alerts')
+            alert_page.open()
+            alert_page.check_prompt_alert()

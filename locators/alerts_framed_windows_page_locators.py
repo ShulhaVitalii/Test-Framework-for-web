@@ -9,3 +9,13 @@ class BrowserWindowsPageLocators:
 
     NEW_WINDOW_MESSAGE_BUTTON = (By.ID, 'messageWindowButton')
     NEW_WINDOW_MESSAGE_TEXT = (By.TAG_NAME, 'body')
+
+
+class AlertPageLocators:
+    BUTTON_TO_SE_ALERT = (By.ID, 'alertButton')
+    BUTTON_TO_SE_ALERT_AFTER_5_SECONDS = (By.ID, 'timerAlertButton')
+    BUTTON_TO_CONFIRM_BOX_WILL_APPEAR = (By.ID, 'confirmButton')
+    CONFIRM_RESULT = (By.ID, 'confirmResult')
+    BUTTON_TO_PROMPT_BOX_WILL_APPEAR = (By.ID, 'promtButton')
+    PROMPT_RESULT = (By.ID, 'promptResult')
+
