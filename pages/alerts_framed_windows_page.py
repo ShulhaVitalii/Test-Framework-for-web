@@ -4,7 +4,7 @@ from selenium.common import UnexpectedAlertPresentException
 from selenium.webdriver.common.alert import Alert
 
 from locators.alerts_framed_windows_page_locators import BrowserWindowsPageLocators, AlertPageLocators, \
-    FramesPageLocators, NestedFramesPageLocators
+    FramesPageLocators, NestedFramesPageLocators, ModalDialogsPageLocators
 from pages.base_page import BasePage
 
 
@@ -116,3 +116,20 @@ class NestedFramesPage(BasePage):
             assert width == '', 'The frame does not exist'
             assert height == '', 'The frame does not exist'
             assert text == 'Child Iframe', 'The frame does not exist'
+
+
+class ModalDialogsPage(BasePage):
+    locators = ModalDialogsPageLocators()
+
+    def check_that_small_modal_window_is_open(self):
+        self.element_is_visible(self.locators.BUTTON_SMALL_MODAL).click()
+        title = self.element_is_visible(self.locators.TITLE_SMALL).text
+        self.element_is_visible(self.locators.BUTTON_CLOSE_SMALL_MODAL).click()
+        assert title == 'Small Modal', 'This is wrong modal window'
+
+    def check_that_large_modal_window_is_open(self):
+        self.element_is_visible(self.locators.BUTTON_LARGE_MODAL).click()
+        title = self.element_is_visible(self.locators.TITLE_LARGE).text
+        self.element_is_visible(self.locators.BUTTON_CLOSE_LARGE_MODAL).click()
+        assert title == 'Large Modal', 'This is wrong modal window'
+

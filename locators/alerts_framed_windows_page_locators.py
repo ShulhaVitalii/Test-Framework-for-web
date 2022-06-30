@@ -30,3 +30,14 @@ class NestedFramesPageLocators:
     FRAME1 = (By.ID, 'frame1')
     FRAME2 = (By.XPATH, '// iframe[@srcdoc="<p>Child Iframe</p>"]')
     FRAME_TEXT = (By.TAG_NAME, 'body')
+
+
+class ModalDialogsPageLocators:
+    BUTTON_SMALL_MODAL = (By.ID, 'showSmallModal')
+    TITLE_SMALL = (By.ID, 'example-modal-sizes-title-sm')
+    BUTTON_CLOSE_SMALL_MODAL = (By.ID, 'closeSmallModal')
+
+    BUTTON_LARGE_MODAL = (By.ID, 'showLargeModal')
+    TITLE_LARGE = (By.ID, 'example-modal-sizes-title-lg')
+    BUTTON_CLOSE_LARGE_MODAL = (By.ID, 'closeLargeModal')
+

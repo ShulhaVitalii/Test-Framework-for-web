@@ -1,4 +1,5 @@
-from pages.alerts_framed_windows_page import BrowserWindowsPage, AlertPage, FramesPage, NestedFramesPage
+from pages.alerts_framed_windows_page import BrowserWindowsPage, AlertPage, FramesPage, NestedFramesPage, \
+    ModalDialogsPage
 
 
 class TestAlertsFramesWindows:
@@ -57,3 +58,10 @@ class TestAlertsFramesWindows:
             nested_frame_page.check_nested_frame('frame1')
             nested_frame_page.check_nested_frame('frame2')
 
+    class TestModalDialogs:
+
+        def test_modal(self, driver):
+            modal_dialog_page = ModalDialogsPage(driver, 'https://demoqa.com/modal-dialogs')
+            modal_dialog_page.open()
+            modal_dialog_page.check_that_small_modal_window_is_open()
+            modal_dialog_page.check_that_large_modal_window_is_open()
