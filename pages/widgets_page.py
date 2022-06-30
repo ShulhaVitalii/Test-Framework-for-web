@@ -1,11 +1,13 @@
 import random
+import time
 
 from selenium.common import TimeoutException
 from selenium.webdriver import Keys
 from selenium.webdriver.support.select import Select
 
 from generator.generator import generate_color, generate_date
-from locators.widgets_page_locators import AccordianPageLocators, AutoCompletePageLocators, DatePickerPageLocators
+from locators.widgets_page_locators import AccordianPageLocators, AutoCompletePageLocators, DatePickerPageLocators, \
+    SliderPageLocators, ProgressBarPageLocators
 from pages.base_page import BasePage
 
 
@@ -114,3 +116,25 @@ class DatePickerPage(BasePage):
         value_date_after = input_date.get_attribute('value')
         assert value_date_before != value_date_after, 'The date and the time has not changed'
 
+
+class SliderPage(BasePage):
+    locators = SliderPageLocators()
+
+    def check_move_slider(self):
+        slider_value_before = self.element_is_visible(self.locators.SLIDER_VALUE).get_attribute('value')
+        slider_input = self.element_is_visible(self.locators.SLIDER)
+        self.action_drag_and_drop_by_offset(slider_input, random.randint(0, 100), 0)
+        slider_value_after = self.element_is_visible(self.locators.SLIDER_VALUE).get_attribute('value')
+        assert slider_value_before != slider_value_after, 'The value of the slider has not changed'
+
+
+class ProgressBarPage(BasePage):
+    locators = ProgressBarPageLocators()
+
+    def check_progress(self):
+        value_before = self.element_is_present(self.locators.PROGRESS_BAR_VALUE).get_attribute('aria-valuenow')
+        self.element_is_visible(self.locators.START_STOP_BUTTON).click()
+        time.sleep(2)
+        self.element_is_visible(self.locators.START_STOP_BUTTON).click()
+        value_after = self.element_is_present(self.locators.PROGRESS_BAR_VALUE).get_attribute('aria-valuenow')
+        assert value_after != value_before, 'The value of the progress bar has not changed'

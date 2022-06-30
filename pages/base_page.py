@@ -55,3 +55,8 @@ class BasePage:
         self.driver.switch_to.window(self.driver.window_handles[1])
         text = self.element_is_visible(locator2).text
         return text
+
+    def action_drag_and_drop_by_offset(self, element, x_coord, y_coord):
+        action = ActionChains(self.driver)
+        action.drag_and_drop_by_offset(element, x_coord, y_coord)
+        action.perform()
