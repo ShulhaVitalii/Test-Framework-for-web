@@ -7,7 +7,8 @@ from selenium.webdriver.support.select import Select
 
 from generator.generator import generate_color, generate_date
 from locators.widgets_page_locators import AccordianPageLocators, AutoCompletePageLocators, DatePickerPageLocators, \
-    SliderPageLocators, ProgressBarPageLocators, TabsPageLocators, TooltipsPageLocators, MenuPageLocators
+    SliderPageLocators, ProgressBarPageLocators, TabsPageLocators, TooltipsPageLocators, MenuPageLocators, \
+    SelectMenuPageLocators
 from pages.base_page import BasePage
 
 
@@ -200,3 +201,31 @@ class MenuPage(BasePage):
             data.append(item.text)
         assert data == ['Main Item 1', 'Main Item 2', 'Sub Item', 'Sub Item', 'SUB SUB LIST »',
                         'Sub Sub Item 1', 'Sub Sub Item 2', 'Main Item 3'], 'The menu opens incorrectly'
+
+
+class SelectMenuPage(BasePage):
+    locators = SelectMenuPageLocators()
+
+    def check_select_menu(self):
+        self.element_is_visible(self.locators.SELECT_VALUE).click()
+        text = random.choice(['Group 1, option 2', 'Group 1, option 2', 'Group 2, option 1', 'Group 2, option 2',
+                              'A root option', 'Another root option'])
+        self.get_element_from_text(text).click()
+        result_text = self.element_is_visible(self.locators.SELECT_VALUE_TEXT).text
+        assert text == result_text
+
+    def check_select_one_menu(self):
+        self.element_is_visible(self.locators.SELECT_ONE).click()
+        text = random.choice(['Dr.', 'Mr.', 'Mrs.', 'Ms.', 'Prof.', 'Other'])
+        self.get_element_from_text(text).click()
+        result_text = self.element_is_visible(self.locators.SELECT_ONE_TEXT).text
+        assert text == result_text
+
+    def check_old_style_select_menu(self):
+        color = random.sample(next(generate_color()).color_name, k=1)
+        el = self.element_is_visible(self.locators.OLD_STYLE_SELECT_MENU)
+        el.click()
+        self.get_element_from_text(color[0]).click()
+        self.get_element_from_text('Old Style Select Menu').click()
+        assert self.get_element_from_text(color[0]), 'The color is not selected or wrong color selected'
+

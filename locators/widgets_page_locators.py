@@ -67,3 +67,15 @@ class TooltipsPageLocators:
 
 class MenuPageLocators:
     MENU_ITEM_LIST = (By. CSS_SELECTOR, 'ul[id="nav"] li a')
+
+
+class SelectMenuPageLocators:
+
+    SELECT_VALUE = (By.ID, 'withOptGroup')
+    SELECT_VALUE_TEXT = (By.XPATH, '//div[@class=" css-1uccc91-singleValue"]')
+
+    SELECT_ONE = (By.ID, 'selectOne')
+    SELECT_ONE_TEXT = (By.XPATH, '//div[@class=" css-1uccc91-singleValue"]')
+
+    OLD_STYLE_SELECT_MENU = (By.ID, 'oldSelectMenu')
+
