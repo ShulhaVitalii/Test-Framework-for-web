@@ -1,4 +1,10 @@
-from locators.widgets_page_locators import AccordianPageLocators
+import random
+
+from selenium.common import TimeoutException
+from selenium.webdriver import Keys
+
+from generator.generator import generate_color
+from locators.widgets_page_locators import AccordianPageLocators, AutoCompletePageLocators
 from pages.base_page import BasePage
 
 
@@ -30,3 +36,38 @@ class AccordianPage(BasePage):
                        " It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum " \
                        "passages, and more recently with desktop publishing software like Aldus PageMaker including" \
                        " versions of Lorem Ipsum."
+
+
+class AutoCompletePage(BasePage):
+    locators = AutoCompletePageLocators()
+
+    def fill_input_multi(self):
+        color = random.sample(next(generate_color()).color_name, k=1)
+        input_multi = self.element_is_clickable(self.locators.MULTI_INPUT)
+        input_multi.send_keys(color)
+        input_multi.send_keys(Keys.ENTER)
+        value = self.element_are_visible(self.locators.MULTI_VALUE)
+        colors = []
+        for v in value:
+            colors.append(v.text)
+        assert color[0] in colors, "Color don't be added"
+
+    def delete_all_values_from_multi(self):
+        count_value_before = len(self.element_are_visible(self.locators.MULTI_VALUE))
+        remove_button_list = self.element_are_visible(self.locators.MULTI_VALUE_REMOVE)
+        for button in remove_button_list:
+            button.click()
+        try:
+            count_value_after = len(self.element_are_visible(self.locators.MULTI_VALUE))
+        except TimeoutException:
+            count_value_after = 0
+        assert count_value_before != count_value_after, "Colors don't be removed"
+        assert count_value_after == 0, "Colors don't be removed"
+
+    def fill_input_single(self):
+        color = random.sample(next(generate_color()).color_name, k=1)
+        input = self.element_is_clickable(self.locators.SINGLE_INPUT)
+        input.send_keys(color)
+        input.send_keys(Keys.ENTER)
+        value = self.element_is_visible(self.locators.SINGLE_VALUE)
+        assert color[0] == value.text, "Color don't be added"

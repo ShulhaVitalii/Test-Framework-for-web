@@ -17,3 +17,7 @@ class Person:
     mobile_number: str = None
     hobbies: int = None
 
+@dataclass
+class Color:
+    color_name: list = None
+
