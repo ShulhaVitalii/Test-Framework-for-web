@@ -2,9 +2,10 @@ import random
 
 from selenium.common import TimeoutException
 from selenium.webdriver import Keys
+from selenium.webdriver.support.select import Select
 
-from generator.generator import generate_color
-from locators.widgets_page_locators import AccordianPageLocators, AutoCompletePageLocators
+from generator.generator import generate_color, generate_date
+from locators.widgets_page_locators import AccordianPageLocators, AutoCompletePageLocators, DatePickerPageLocators
 from pages.base_page import BasePage
 
 
@@ -71,3 +72,45 @@ class AutoCompletePage(BasePage):
         input.send_keys(Keys.ENTER)
         value = self.element_is_visible(self.locators.SINGLE_VALUE)
         assert color[0] == value.text, "Color don't be added"
+
+
+class DatePickerPage(BasePage):
+    locators = DatePickerPageLocators()
+
+    def select_date(self):
+        date = next(generate_date())
+        input_date = self.element_is_visible(self.locators.INPUT_DATE)
+        value_date_before = input_date.get_attribute('value')
+        input_date.click()
+        self.select_date_by_text(self.locators.DATA_SELECT_MONTH, date.month)
+        self.select_date_by_text(self.locators.DATA_SELECT_YEAR, date.year)
+        self.select_date_item_from_list(self.locators.DATA_SELECT_DAY, date.day)
+        input_date.send_keys(Keys.ENTER)
+        value_date_after = input_date.get_attribute('value')
+        assert value_date_before != value_date_after, 'The date has not changed'
+
+    def select_date_by_text(self, element, value):
+        select = Select(self.element_is_present(element))
+        select.select_by_visible_text(value)
+
+    def select_date_item_from_list(self, elements, value):
+        item_list = self.element_are_present(elements)
+        for item in item_list:
+            if item.text == value:
+                item.click()
+                break
+
+    def select_date_and_time(self):
+        date = next(generate_date())
+        input_date = self.element_is_visible(self.locators.INPUT_DATE_AND_TIME)
+        value_date_before = input_date.get_attribute('value')
+        input_date.click()
+        self.element_is_visible(self.locators.DATA_AND_TIME_SELECT_MONTH).click()
+        self.select_date_item_from_list(self.locators.DATA_AND_TIME_SELECT_MONTH_LIST, date.month)
+        self.element_is_visible(self.locators.DATA_AND_TIME_SELECT_YEAR).click()
+        self.select_date_item_from_list(self.locators.DATA_AND_TIME_SELECT_YEAR_LIST, date.year)
+        self.select_date_item_from_list(self.locators.DATA_AND_TIME_SELECT_TIME, date.time)
+        input_date.send_keys(Keys.ENTER)
+        value_date_after = input_date.get_attribute('value')
+        assert value_date_before != value_date_after, 'The date and the time has not changed'
+

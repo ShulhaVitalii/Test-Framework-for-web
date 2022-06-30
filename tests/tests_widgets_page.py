@@ -1,4 +1,6 @@
-from pages.widgets_page import AccordianPage, AutoCompletePage
+import time
+
+from pages.widgets_page import AccordianPage, AutoCompletePage, DatePickerPage
 
 
 class TestsWidgetsPage:
@@ -24,4 +26,17 @@ class TestsWidgetsPage:
             auto_comlete_page.open()
             auto_comlete_page.fill_input_single()
 
+    class TestsDatePickerPage:
+
+        def test_change_data(self, driver):
+            data_picker_page = DatePickerPage(driver, 'https://demoqa.com/date-picker')
+            data_picker_page.open()
+            data_picker_page.select_date()
+            time.sleep(3)
+
+        def test_change_data_and_time(self, driver):
+            data_picker_page = DatePickerPage(driver, 'https://demoqa.com/date-picker')
+            data_picker_page.open()
+            data_picker_page.select_date_and_time()
+            time.sleep(3)
 

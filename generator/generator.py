@@ -1,6 +1,6 @@
 import random
 
-from data.data import Person, Color
+from data.data import Person, Color, Date
 
 from faker import Faker
 
@@ -42,5 +42,14 @@ def generate_subject_list():
 def generate_color():
     yield Color(
         color_name=['Green', 'Blue', 'Black', 'Red', 'Aqua', 'Magenta', 'Indigo', 'Voilet', 'White', 'Purple', 'Yellow']
+    )
+
+
+def generate_date():
+    yield Date(
+        year=faker_en.year(),
+        month=faker_en.month_name(),
+        day=faker_en.day_of_month(),
+        time=random.choice(['07:15', '09:30', '12:00', '23:45'])
     )
 
