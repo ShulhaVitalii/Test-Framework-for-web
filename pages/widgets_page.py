@@ -7,7 +7,7 @@ from selenium.webdriver.support.select import Select
 
 from generator.generator import generate_color, generate_date
 from locators.widgets_page_locators import AccordianPageLocators, AutoCompletePageLocators, DatePickerPageLocators, \
-    SliderPageLocators, ProgressBarPageLocators, TabsPageLocators
+    SliderPageLocators, ProgressBarPageLocators, TabsPageLocators, TooltipsPageLocators
 from pages.base_page import BasePage
 
 
@@ -162,3 +162,28 @@ class TabsPage(BasePage):
         button.click()
         text = self.element_is_visible(locator).text
         return text
+
+
+class TooltipsPage(BasePage):
+    locators = TooltipsPageLocators()
+
+    def check_too_tip(self):
+        self.action_move_to_element(self.element_is_visible(self.locators.BUTTON))
+        text = self.get_tool_tip_text()
+        assert text == 'You hovered over the Button', "You don't hovered over the Button"
+
+        self.action_move_to_element(self.element_is_visible(self.locators.INPUT))
+        text = self.get_tool_tip_text()
+        assert text == 'You hovered over the text field', "You don't hovered over the text field"
+
+        self.action_move_to_element(self.element_is_visible(self.locators.LINK1))
+        text = self.get_tool_tip_text()
+        assert text == 'You hovered over the Contrary', "You don't hovered over the Contrary"
+
+        self.action_move_to_element(self.element_is_visible(self.locators.LINK2))
+        text = self.get_tool_tip_text()
+        assert text == 'You hovered over the 1.10.32', "You don't hovered over the 1.10.32"
+
+    def get_tool_tip_text(self):
+        time.sleep(0.5)
+        return self.element_is_visible(self.locators.TOOL_TIP).text

@@ -56,3 +56,10 @@ class TabsPageLocators:
     TAB_MORE = (By.ID, 'demo-tab-more')
 
 
+class TooltipsPageLocators:
+    BUTTON = (By.ID, 'toolTipButton')
+    INPUT = (By.ID, 'toolTipTextField')
+    LINK1 = (By.XPATH, '//div[@id="texToolTopContainer"]/a[1]')
+    LINK2 = (By.XPATH, '//div[@id="texToolTopContainer"]/a[2]')
+
+    TOOL_TIP = (By.XPATH, '//div[@class="tooltip-inner"]')
