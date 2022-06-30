@@ -44,3 +44,15 @@ class ProgressBarPageLocators:
     START_STOP_BUTTON = (By.ID, 'startStopButton')
     PROGRESS_BAR_VALUE = (By.XPATH, '//div[@role="progressbar"]')
 
+
+class TabsPageLocators:
+    TAB_WHAT = (By.ID, 'demo-tab-what')
+    WHAT_CONTENT = (By.CSS_SELECTOR, '#demo-tabpane-what p')
+    ORIGIN_CONTENT = (By.CSS_SELECTOR, '#demo-tabpane-origin p')
+    USE_CONTENT = (By.CSS_SELECTOR, '#demo-tabpane-use p')
+    MORE_CONTENT = (By.CSS_SELECTOR, '#demo-tabpane-more p')
+    TAB_ORIGIN = (By.ID, 'demo-tab-origin')
+    TAB_USE = (By.ID, 'demo-tab-use')
+    TAB_MORE = (By.ID, 'demo-tab-more')
+
+

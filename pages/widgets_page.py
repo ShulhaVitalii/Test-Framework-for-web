@@ -7,7 +7,7 @@ from selenium.webdriver.support.select import Select
 
 from generator.generator import generate_color, generate_date
 from locators.widgets_page_locators import AccordianPageLocators, AutoCompletePageLocators, DatePickerPageLocators, \
-    SliderPageLocators, ProgressBarPageLocators
+    SliderPageLocators, ProgressBarPageLocators, TabsPageLocators
 from pages.base_page import BasePage
 
 
@@ -138,3 +138,27 @@ class ProgressBarPage(BasePage):
         self.element_is_visible(self.locators.START_STOP_BUTTON).click()
         value_after = self.element_is_present(self.locators.PROGRESS_BAR_VALUE).get_attribute('aria-valuenow')
         assert value_after != value_before, 'The value of the progress bar has not changed'
+
+
+class TabsPage(BasePage):
+    locators = TabsPageLocators()
+
+    def check_tabs(self):
+        what_button = self.element_is_visible(self.locators.TAB_WHAT)
+        origin_button = self.element_is_visible(self.locators.TAB_ORIGIN)
+        use_button = self.element_is_visible(self.locators.TAB_USE)
+        more_button = self.element_is_visible(self.locators.TAB_MORE)
+
+        what_text = self.get_content(what_button, self.locators.WHAT_CONTENT)
+        assert 'unchanged. It was popularised in the 1960s with ' in what_text, 'What text is wrong'
+        origin_text = self.get_content(origin_button, self.locators.ORIGIN_CONTENT)
+        assert ' sections 1.10.32 and 1.10.33 of "de Finibus B' in origin_text
+        use_text = self.get_content(use_button, self.locators.USE_CONTENT)
+        assert ' readable English. Many desktop publishing packages ' in use_text
+        more_text = self.get_content(more_button, self.locators.MORE_CONTENT)
+        assert more_text
+
+    def get_content(self, button, locator):
+        button.click()
+        text = self.element_is_visible(locator).text
+        return text
