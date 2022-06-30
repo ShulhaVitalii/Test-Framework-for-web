@@ -63,3 +63,7 @@ class TooltipsPageLocators:
     LINK2 = (By.XPATH, '//div[@id="texToolTopContainer"]/a[2]')
 
     TOOL_TIP = (By.XPATH, '//div[@class="tooltip-inner"]')
+
+
+class MenuPageLocators:
+    MENU_ITEM_LIST = (By. CSS_SELECTOR, 'ul[id="nav"] li a')
