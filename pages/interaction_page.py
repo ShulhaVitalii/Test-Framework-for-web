@@ -162,3 +162,37 @@ class DroppablePage(BasePage):
 
 class DragabblePage(BasePage):
     locators = DragabblePageLocators()
+
+    def all_tab_is_clickable(self):
+        self.element_is_visible(self.locators.SIMPLE_TAB).click()
+        assert self.element_is_visible(self.locators.SIMPLE_TAB).get_attribute('aria-selected') == 'true',\
+            'The tab is not active'
+        self.element_is_visible(self.locators.AXIS_RESTRICTED_TAB).click()
+        assert self.element_is_visible(self.locators.AXIS_RESTRICTED_TAB).get_attribute('aria-selected') == 'true',\
+            'The tab is not active'
+        self.element_is_visible(self.locators.CONTAINER_RESTRICTED_TAB).click()
+        assert self.element_is_visible(self.locators.CONTAINER_RESTRICTED_TAB).get_attribute('aria-selected') == 'true',\
+            'The tab is not active'
+        self.element_is_visible(self.locators.CURSOR_STYLE_TAB).click()
+        assert self.element_is_visible(self.locators.CURSOR_STYLE_TAB).get_attribute('aria-selected') == 'true',\
+            'The tab is not active'
+
+    def dragabble_simple(self):
+        self.element_is_visible(self.locators.SIMPLE_TAB).click()
+        drag_me = self.element_is_visible(self.locators.DRAG_ME)
+        position_before = drag_me.get_attribute('style')
+        self.action_drag_and_drop_by_offset(drag_me, 200, 200)
+        position_after = drag_me.get_attribute('style')
+        assert position_before != position_after, "The element doesn't move"
+
+    def check_axis_restricted(self):
+        self.element_is_visible(self.locators.AXIS_RESTRICTED_TAB).click()
+        drag_me = self.element_is_visible(self.locators.ONLY_X)
+        self.action_drag_and_drop_by_offset(drag_me, 200, 200)
+        position = drag_me.get_attribute('style').split(';')[2].split(':')[1]
+        assert position == ' 0px', "The element moved on Y but shouldn't be"
+
+        drag_me = self.element_is_visible(self.locators.ONLY_Y)
+        self.action_drag_and_drop_by_offset(drag_me, 200, 200)
+        position = drag_me.get_attribute('style').split(';')[1].split(':')[1]
+        assert position == ' 0px', "The element moved on X but shouldn't be"

@@ -56,5 +56,15 @@ class DroppablePageLocators:
     RD_DROP_HERE = (By.CSS_SELECTOR, '#revertableDropContainer #droppable p')
 
 class DragabblePageLocators:
-    pass
+    SIMPLE_TAB = (By.XPATH, '//a[@id="draggableExample-tab-simple"]')
+    AXIS_RESTRICTED_TAB = (By.ID, 'draggableExample-tab-axisRestriction')
+    CONTAINER_RESTRICTED_TAB = (By.ID, 'draggableExample-tab-containerRestriction')
+    CURSOR_STYLE_TAB = (By.ID, 'draggableExample-tab-cursorStyle')
+
+    # Simple
+    DRAG_ME = (By.ID, 'dragBox')
+
+    # Axis Restricted
+    ONLY_X = (By.ID, 'restrictedX')
+    ONLY_Y = (By.ID, 'restrictedY')
 

@@ -56,11 +56,21 @@ class TestInteractions:
             droppable_page.open()
             droppable_page.check_revert_draggable_tab()
 
-
     class TestDragabblePage:
 
-        def test_dragabble(self, driver):
+        def test_dragabble_all_tab_is_clickable(self, driver):
             dragabble_page = DragabblePage(driver, 'https://demoqa.com/dragabble')
             dragabble_page.open()
+            dragabble_page.all_tab_is_clickable()
+
+        def test_dragabble_simple(self, driver):
+            dragabble_page = DragabblePage(driver, 'https://demoqa.com/dragabble')
+            dragabble_page.open()
+            dragabble_page.dragabble_simple()
+
+        def test_dragabble_axis_restricted(self, driver):
+            dragabble_page = DragabblePage(driver, 'https://demoqa.com/dragabble')
+            dragabble_page.open()
+            dragabble_page.check_axis_restricted()
 
 
