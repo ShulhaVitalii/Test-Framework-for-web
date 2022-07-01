@@ -18,8 +18,13 @@ class SelectablePageLocators:
     SELECTED_LIST_ITEMS = (By.XPATH, '//div[@id="demo-tabpane-list"]//li[@class="mt-2 list-group-item active'
                                      ' list-group-item-action"]')
 
+
 class ResizablePageLocators:
-    pass
+    BOX_WITH_RESTRICTION = (By.ID, 'resizableBoxWithRestriction')
+    BOX_WITHOUT_RESTRICTION = (By.ID, 'resizable')
+    BOX_WITH_RESTRICTION_HANDLE = (By.XPATH, '//span[@class="react-resizable-handle react-resizable-handle-se"][1]')
+    BOX_WITHOUT_RESTRICTION_HANDLE = (By.XPATH, '//div[@id="resizable"]//span[@class="react-resizable-handle'
+                                                ' react-resizable-handle-se"]')
 
 
 class DroppablePageLocators:

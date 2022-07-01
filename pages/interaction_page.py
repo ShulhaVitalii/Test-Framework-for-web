@@ -46,6 +46,40 @@ class SelectablePage(BasePage):
 class ResizablePage(BasePage):
     locators = ResizablePageLocators()
 
+    def get_box_size(self, value_of_size):
+        width = value_of_size.split(';')[0].split(':')[1].replace(' ', '')
+        height = value_of_size.split(';')[1].split(':')[1].replace(' ', '')
+        return width, height
+
+    def get_max_min_size(self, element):
+        size = self.element_is_present(element).get_attribute('style')
+        return size
+
+    def change_size_resizable_box(self):
+        self.action_drag_and_drop_by_offset(self.element_is_present(self.locators.BOX_WITH_RESTRICTION_HANDLE), 400, 200)
+        max_size = self.get_box_size(self.get_max_min_size(self.locators.BOX_WITH_RESTRICTION))
+        self.action_drag_and_drop_by_offset(self.element_is_present(self.locators.BOX_WITH_RESTRICTION_HANDLE), -500, -300)
+        min_size = self.get_box_size(self.get_max_min_size(self.locators.BOX_WITH_RESTRICTION))
+        return max_size, min_size
+
+    def change_size_resizable_box_without_restriction(self):
+        self.action_drag_and_drop_by_offset(self.element_is_visible(self.locators.BOX_WITHOUT_RESTRICTION_HANDLE),
+                                            random.randint(1, 300), random.randint(1, 300))
+        max_size = self.get_box_size(self.get_max_min_size(self.locators.BOX_WITHOUT_RESTRICTION))
+        self.action_drag_and_drop_by_offset(self.element_is_visible(self.locators.BOX_WITHOUT_RESTRICTION_HANDLE),
+                                            random.randint(-200, -1), random.randint(-200, -1))
+        min_size = self.get_box_size(self.get_max_min_size(self.locators.BOX_WITHOUT_RESTRICTION))
+        return max_size, min_size
+
+    def check_resizable_box(self):
+        max_size, min_size = self.change_size_resizable_box()
+        assert ('500px', '300px') == max_size, 'Max size not equal to 500px, 300px'
+        assert ('150px', '150px') == min_size, 'Max size not equal to 150px, 150px'
+
+    def check_resizable_box_without_restriction(self):
+        max_size, min_size = self.change_size_resizable_box_without_restriction()
+        assert min_size != max_size, 'resizable box without restriction has not been changed'
+
 
 class DroppablePage(BasePage):
     locators = DroppablePageLocators()

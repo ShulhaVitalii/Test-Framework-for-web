@@ -31,6 +31,8 @@ class TestInteractions:
         def test_resizable(self, driver):
             resizable_page = ResizablePage(driver, 'https://demoqa.com/resizable')
             resizable_page.open()
+            resizable_page.change_size_resizable_box()
+            resizable_page.change_size_resizable_box_without_restriction()
 
     class TestDroppablePage:
 
