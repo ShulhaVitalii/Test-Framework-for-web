@@ -1,4 +1,5 @@
 import random
+import time
 
 from locators.interactions_page_locators import SortablePageLocators, SelectablePageLocators, ResizablePageLocators, \
     DroppablePageLocators, DragabblePageLocators
@@ -84,6 +85,80 @@ class ResizablePage(BasePage):
 class DroppablePage(BasePage):
     locators = DroppablePageLocators()
 
+    def check_simple_tab(self):
+        self.element_is_visible(self.locators.TAB_SIMPLE).click()
+        text_before = self.element_is_visible(self.locators.DROP_HERE_TEXT).text
+        element_to_drag = self.element_is_visible(self.locators.DRAG_ME_SIMPLE)
+        element_to_drop = self.element_is_visible(self.locators.DROP_HERE_SIMPLE)
+        self.action_drag_and_drop_to_element(element_to_drag, element_to_drop)
+        text_after = self.element_is_visible(self.locators.DROP_HERE_TEXT).text
+        assert text_before != text_after, "The element don't has been dragged or dropped"
+        assert text_after == 'Dropped!', 'Wrong text after dropping'
+
+    def check_accept_tab(self):
+        self.element_is_visible(self.locators.TAB_ACCEPT).click()
+        text_before = self.element_is_visible(self.locators.DROP_HERE_ACCEPT_TEXT).text
+        element_to_drag = self.element_is_visible(self.locators.NON_ACCEPTABLE)
+        element_to_drop = self.element_is_visible(self.locators.DROP_HERE_ACCEPT)
+        self.action_drag_and_drop_to_element(element_to_drag, element_to_drop)
+        text_after = self.element_is_visible(self.locators.DROP_HERE_ACCEPT_TEXT).text
+        assert text_before == text_after, "The text should not changed"
+        element_to_drag = self.element_is_visible(self.locators.ACCEPTABLE)
+        self.action_drag_and_drop_to_element(element_to_drag, element_to_drop)
+        text_after = self.element_is_visible(self.locators.DROP_HERE_ACCEPT_TEXT).text
+        assert text_before != text_after, "The element don't has been dragged or dropped"
+        assert text_after == 'Dropped!', 'Wrong text after dropping'
+
+    def drag_and_drop(self, el_drag, el_drop):
+        element_to_drag = self.element_is_visible(el_drag)
+        element_to_drop = self.element_is_visible(el_drop)
+        self.action_drag_and_drop_to_element(element_to_drag, element_to_drop)
+        text_after = []
+        for text in self.element_are_visible(self.locators.PP_TEXT_LIST):
+            text_after.append(text.text)
+        return text_after
+
+    def check_prevent_propogation_tab(self):
+        self.element_is_visible(self.locators.PP).click()
+        text_before = []
+        for text in self.element_are_visible(self.locators.PP_TEXT_LIST):
+            text_before.append(text.text)
+        print(text_before)
+
+        text_after = self.drag_and_drop(self.locators.PP_DRAG_ME, self.locators.PP_NOT_GREEDY_INNER)
+        assert text_before != text_after
+        assert text_after == ['Dropped!', 'Dropped!', 'Outer droppable', 'Inner droppable (greedy)']
+
+        text_after = self.drag_and_drop(self.locators.PP_DRAG_ME, self.locators.PP_GREEDY_INNER)
+        assert text_after == ['Dropped!', 'Dropped!', 'Outer droppable', 'Dropped!']
+
+        text_after = self.drag_and_drop(self.locators.PP_DRAG_ME, self.locators.PP_GREEDY)
+        assert text_after == ['Dropped!', 'Dropped!', 'Dropped!', 'Dropped!']
+
+    def check_revert_draggable_tab(self):
+        self.element_is_visible(self.locators.RD).click()
+        text_before = self.element_is_visible(self.locators.RD_DROP_HERE).text
+        element_to_drag = self.element_is_visible(self.locators.RD_NOT_REVERT)
+        element_to_drop = self.element_is_visible(self.locators.RD_DROP_HERE)
+        self.action_drag_and_drop_to_element(element_to_drag, element_to_drop)
+        coord_after_move = self.element_is_visible(self.locators.RD_NOT_REVERT).get_attribute('style')
+        time.sleep(1)
+        coord_after_1_sec = self.element_is_visible(self.locators.RD_NOT_REVERT).get_attribute('style')
+        assert coord_after_move == coord_after_1_sec, \
+            "The coordinates should be the same, the element reversed but shouldn't"
+
+        text_after = self.element_is_visible(self.locators.RD_DROP_HERE).text
+        assert text_before != text_after, "The element don't has been dragged or dropped"
+
+        element_to_drag = self.element_is_visible(self.locators.RD_WILL_REVERT)
+        element_to_drop = self.element_is_visible(self.locators.RD_DROP_HERE)
+        self.action_drag_and_drop_to_element(element_to_drag, element_to_drop)
+        coord_after_move = self.element_is_visible(self.locators.RD_WILL_REVERT).get_attribute('style')
+        time.sleep(1)
+        coord_after_1_sec = self.element_is_visible(self.locators.RD_WILL_REVERT).get_attribute('style')
+        print(coord_after_1_sec, coord_after_move)
+        assert coord_after_move != coord_after_1_sec, "The element was not reversed back"
+        assert coord_after_1_sec == 'position: relative; left: 0px; top: 0px;', "The element was not reversed back"
 
 class DragabblePage(BasePage):
     locators = DragabblePageLocators()

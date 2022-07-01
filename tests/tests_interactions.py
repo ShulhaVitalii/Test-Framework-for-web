@@ -36,9 +36,26 @@ class TestInteractions:
 
     class TestDroppablePage:
 
-        def test_droppable(self, driver):
+        def test_droppable_simple(self, driver):
             droppable_page = DroppablePage(driver, 'https://demoqa.com/droppable')
             droppable_page.open()
+            droppable_page.check_simple_tab()
+
+        def test_droppable_accept(self, driver):
+            droppable_page = DroppablePage(driver, 'https://demoqa.com/droppable')
+            droppable_page.open()
+            droppable_page.check_accept_tab()
+
+        def test_droppable_prevent_propogation(self, driver):
+            droppable_page = DroppablePage(driver, 'https://demoqa.com/droppable')
+            droppable_page.open()
+            droppable_page.check_prevent_propogation_tab()
+
+        def test_droppable_revert_draggable(self, driver):
+            droppable_page = DroppablePage(driver, 'https://demoqa.com/droppable')
+            droppable_page.open()
+            droppable_page.check_revert_draggable_tab()
+
 
     class TestDragabblePage:
 
