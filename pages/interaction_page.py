@@ -27,6 +27,21 @@ class SortablePage(BasePage):
 class SelectablePage(BasePage):
     locators = SelectablePageLocators()
 
+    def get_select_item(self, elements):
+        selected_items = self.element_are_visible(elements)
+        return selected_items
+
+    def select_elements(self, locator1, locator2, locator3):
+        self.element_is_visible(locator1).click()
+        # get 3 elements from item list
+        items_to_select = random.sample(self.element_are_visible(locator2), k=3)
+        for item in items_to_select:
+            item.click()
+        selected_items = self.get_select_item(locator3)
+        assert len(selected_items) == 3, 'Should be 3 selected items'
+        assert sorted([item.text for item in items_to_select]) == sorted([item.text for item in selected_items]),\
+            'Selected wrong items'
+
 
 class ResizablePage(BasePage):
     locators = ResizablePageLocators()

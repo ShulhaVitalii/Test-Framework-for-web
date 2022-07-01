@@ -1,6 +1,6 @@
 import pytest
 
-from locators.interactions_page_locators import SortablePageLocators
+from locators.interactions_page_locators import SortablePageLocators, SelectablePageLocators
 from pages.interaction_page import SortablePage, ResizablePage, SelectablePage, DroppablePage, DragabblePage
 
 
@@ -15,11 +15,16 @@ class TestInteractions:
             sortable_page.change_order(locator1, locator2)
 
     class TestSelectablePage:
-
-        def test_selectable(self, driver):
+        @pytest.mark.parametrize('locator1, locator2, locator3', [(SelectablePageLocators.LIST,
+                                                                   SelectablePageLocators.LIST_ITEMS,
+                                                                   SelectablePageLocators.SELECTED_LIST_ITEMS),
+                                                                  (SelectablePageLocators.GRID,
+                                                                  SelectablePageLocators.GRID_ITEMS,
+                                                                  SelectablePageLocators.SELECTED_GRID_ITEMS)])
+        def test_selectable(self, driver, locator1, locator2, locator3):
             selectable_page = SelectablePage(driver, 'https://demoqa.com/selectable')
             selectable_page.open()
-
+            selectable_page.select_elements(locator1, locator2, locator3)
 
     class TestResizablePage:
 
