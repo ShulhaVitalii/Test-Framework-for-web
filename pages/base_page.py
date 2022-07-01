@@ -69,3 +69,8 @@ class BasePage:
 
     def get_element_from_text(self, text):
         return self.element_is_visible((By.XPATH, f'//*[contains(text(), "{text}")]'))
+
+    def action_drag_and_drop_to_element(self, what, where):
+        action = ActionChains(self.driver)
+        action.drag_and_drop(what, where)
+        action.perform()
