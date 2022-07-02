@@ -1,6 +1,7 @@
 import random
 import time
 
+import allure
 from selenium.common import TimeoutException
 from selenium.webdriver import Keys
 from selenium.webdriver.support.select import Select
@@ -15,6 +16,7 @@ from pages.base_page import BasePage
 class AccordianPage(BasePage):
     locators = AccordianPageLocators()
 
+    @allure.step('Checking accordian')
     def check_accordian(self):
         self.element_is_visible(self.locators.HEADER_SECTION2).click()
         text = self.element_is_visible(self.locators.CONTENT_SECTION2).text
@@ -45,6 +47,7 @@ class AccordianPage(BasePage):
 class AutoCompletePage(BasePage):
     locators = AutoCompletePageLocators()
 
+    @allure.step('Filling input multi')
     def fill_input_multi(self):
         color = random.sample(next(generate_color()).color_name, k=1)
         input_multi = self.element_is_clickable(self.locators.MULTI_INPUT)
@@ -54,8 +57,10 @@ class AutoCompletePage(BasePage):
         colors = []
         for v in value:
             colors.append(v.text)
-        assert color[0] in colors, "Color don't be added"
+        with allure.step('Checking color in the input'):
+            assert color[0] in colors, "Color don't be added"
 
+    @allure.step('Deleting all values from multi')
     def delete_all_values_from_multi(self):
         count_value_before = len(self.element_are_visible(self.locators.MULTI_VALUE))
         remove_button_list = self.element_are_visible(self.locators.MULTI_VALUE_REMOVE)
@@ -65,21 +70,25 @@ class AutoCompletePage(BasePage):
             count_value_after = len(self.element_are_visible(self.locators.MULTI_VALUE))
         except TimeoutException:
             count_value_after = 0
-        assert count_value_before != count_value_after, "Colors don't be removed"
-        assert count_value_after == 0, "Colors don't be removed"
+        with allure.step('Checking that color is removed'):
+            assert count_value_before != count_value_after, "Colors don't be removed"
+            assert count_value_after == 0, "Colors don't be removed"
 
+    @allure.step('Filling input single')
     def fill_input_single(self):
         color = random.sample(next(generate_color()).color_name, k=1)
         input = self.element_is_clickable(self.locators.SINGLE_INPUT)
         input.send_keys(color)
         input.send_keys(Keys.ENTER)
         value = self.element_is_visible(self.locators.SINGLE_VALUE)
-        assert color[0] == value.text, "Color don't be added"
+        with allure.step('Checking that color is added'):
+            assert color[0] == value.text, "Color don't be added"
 
 
 class DatePickerPage(BasePage):
     locators = DatePickerPageLocators()
 
+    @allure.step('Selecting date')
     def select_date(self):
         date = next(generate_date())
         input_date = self.element_is_visible(self.locators.INPUT_DATE)
@@ -90,12 +99,15 @@ class DatePickerPage(BasePage):
         self.select_date_item_from_list(self.locators.DATA_SELECT_DAY, date.day)
         input_date.send_keys(Keys.ENTER)
         value_date_after = input_date.get_attribute('value')
-        assert value_date_before != value_date_after, 'The date has not changed'
+        with allure.step('Checking that date was changed'):
+            assert value_date_before != value_date_after, 'The date has not changed'
 
+    @allure.step('Selecting date by text')
     def select_date_by_text(self, element, value):
         select = Select(self.element_is_present(element))
         select.select_by_visible_text(value)
 
+    @allure.step('Selecting date item from the list')
     def select_date_item_from_list(self, elements, value):
         item_list = self.element_are_present(elements)
         for item in item_list:
@@ -103,6 +115,7 @@ class DatePickerPage(BasePage):
                 item.click()
                 break
 
+    @allure.step('Selecting date amd time')
     def select_date_and_time(self):
         date = next(generate_date())
         input_date = self.element_is_visible(self.locators.INPUT_DATE_AND_TIME)
@@ -115,18 +128,21 @@ class DatePickerPage(BasePage):
         self.select_date_item_from_list(self.locators.DATA_AND_TIME_SELECT_TIME, date.time)
         input_date.send_keys(Keys.ENTER)
         value_date_after = input_date.get_attribute('value')
-        assert value_date_before != value_date_after, 'The date and the time has not changed'
+        with allure.step('Checking that date was changed'):
+            assert value_date_before != value_date_after, 'The date and the time has not changed'
 
 
 class SliderPage(BasePage):
     locators = SliderPageLocators()
 
+    @allure.step('Checking move slider')
     def check_move_slider(self):
         slider_value_before = self.element_is_visible(self.locators.SLIDER_VALUE).get_attribute('value')
         slider_input = self.element_is_visible(self.locators.SLIDER)
         self.action_drag_and_drop_by_offset(slider_input, random.randint(0, 100), 0)
         slider_value_after = self.element_is_visible(self.locators.SLIDER_VALUE).get_attribute('value')
-        assert slider_value_before != slider_value_after, 'The value of the slider has not changed'
+        with allure.step('Checking that slider value was changed'):
+            assert slider_value_before != slider_value_after, 'The value of the slider has not changed'
 
 
 class ProgressBarPage(BasePage):
@@ -138,7 +154,8 @@ class ProgressBarPage(BasePage):
         time.sleep(2)
         self.element_is_visible(self.locators.START_STOP_BUTTON).click()
         value_after = self.element_is_present(self.locators.PROGRESS_BAR_VALUE).get_attribute('aria-valuenow')
-        assert value_after != value_before, 'The value of the progress bar has not changed'
+        with allure.step('Checking that value of the progres was changed'):
+            assert value_after != value_before, 'The value of the progress bar has not changed'
 
 
 class TabsPage(BasePage):
@@ -151,14 +168,19 @@ class TabsPage(BasePage):
         more_button = self.element_is_visible(self.locators.TAB_MORE)
 
         what_text = self.get_content(what_button, self.locators.WHAT_CONTENT)
-        assert 'unchanged. It was popularised in the 1960s with ' in what_text, 'What text is wrong'
+        with allure.step('Checking that text is correct'):
+            assert 'unchanged. It was popularised in the 1960s with ' in what_text, 'What text is wrong'
         origin_text = self.get_content(origin_button, self.locators.ORIGIN_CONTENT)
-        assert ' sections 1.10.32 and 1.10.33 of "de Finibus B' in origin_text
+        with allure.step('Checking that text is correct'):
+            assert ' sections 1.10.32 and 1.10.33 of "de Finibus B' in origin_text
         use_text = self.get_content(use_button, self.locators.USE_CONTENT)
-        assert ' readable English. Many desktop publishing packages ' in use_text
+        with allure.step('Checking that text is correct'):
+            assert ' readable English. Many desktop publishing packages ' in use_text
         more_text = self.get_content(more_button, self.locators.MORE_CONTENT)
-        assert more_text
+        with allure.step('Checking that text is correct'):
+            assert more_text
 
+    @allure.step('Getting content')
     def get_content(self, button, locator):
         button.click()
         text = self.element_is_visible(locator).text
@@ -171,20 +193,25 @@ class TooltipsPage(BasePage):
     def check_too_tip(self):
         self.action_move_to_element(self.element_is_visible(self.locators.BUTTON))
         text = self.get_tool_tip_text()
-        assert text == 'You hovered over the Button', "You don't hovered over the Button"
+        with allure.step('Checking that text is correct'):
+            assert text == 'You hovered over the Button', "You don't hovered over the Button"
 
         self.action_move_to_element(self.element_is_visible(self.locators.INPUT))
         text = self.get_tool_tip_text()
-        assert text == 'You hovered over the text field', "You don't hovered over the text field"
+        with allure.step('Checking that text is correct'):
+            assert text == 'You hovered over the text field', "You don't hovered over the text field"
 
         self.action_move_to_element(self.element_is_visible(self.locators.LINK1))
         text = self.get_tool_tip_text()
-        assert text == 'You hovered over the Contrary', "You don't hovered over the Contrary"
+        with allure.step('Checking that text is correct'):
+            assert text == 'You hovered over the Contrary', "You don't hovered over the Contrary"
 
         self.action_move_to_element(self.element_is_visible(self.locators.LINK2))
         text = self.get_tool_tip_text()
-        assert text == 'You hovered over the 1.10.32', "You don't hovered over the 1.10.32"
+        with allure.step('Checking that text is correct'):
+            assert text == 'You hovered over the 1.10.32', "You don't hovered over the 1.10.32"
 
+    @allure.step('Getting tool tip text')
     def get_tool_tip_text(self):
         time.sleep(0.5)
         return self.element_is_visible(self.locators.TOOL_TIP).text
@@ -193,19 +220,22 @@ class TooltipsPage(BasePage):
 class MenuPage(BasePage):
     locators = MenuPageLocators()
 
+    @allure.step('Checking menu')
     def check_menu(self):
         items = self.element_are_present(self.locators.MENU_ITEM_LIST)
         data = []
         for item in items:
             self.action_move_to_element(item)
             data.append(item.text)
-        assert data == ['Main Item 1', 'Main Item 2', 'Sub Item', 'Sub Item', 'SUB SUB LIST »',
-                        'Sub Sub Item 1', 'Sub Sub Item 2', 'Main Item 3'], 'The menu opens incorrectly'
+        with allure.step('Checking that menu opened correctly'):
+            assert data == ['Main Item 1', 'Main Item 2', 'Sub Item', 'Sub Item', 'SUB SUB LIST »',
+                            'Sub Sub Item 1', 'Sub Sub Item 2', 'Main Item 3'], 'The menu opens incorrectly'
 
 
 class SelectMenuPage(BasePage):
     locators = SelectMenuPageLocators()
 
+    @allure.step('Checking select menu')
     def check_select_menu(self):
         self.element_is_visible(self.locators.SELECT_VALUE).click()
         text = random.choice(['Group 1, option 2', 'Group 1, option 2', 'Group 2, option 1', 'Group 2, option 2',
@@ -214,6 +244,7 @@ class SelectMenuPage(BasePage):
         result_text = self.element_is_visible(self.locators.SELECT_VALUE_TEXT).text
         assert text == result_text
 
+    @allure.step('Checking one menu')
     def check_select_one_menu(self):
         self.element_is_visible(self.locators.SELECT_ONE).click()
         text = random.choice(['Dr.', 'Mr.', 'Mrs.', 'Ms.', 'Prof.', 'Other'])
@@ -221,6 +252,7 @@ class SelectMenuPage(BasePage):
         result_text = self.element_is_visible(self.locators.SELECT_ONE_TEXT).text
         assert text == result_text
 
+    @allure.step('Checking old style select menu')
     def check_old_style_select_menu(self):
         color = random.sample(next(generate_color()).color_name, k=1)
         el = self.element_is_visible(self.locators.OLD_STYLE_SELECT_MENU)

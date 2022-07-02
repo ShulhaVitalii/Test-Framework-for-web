@@ -1,6 +1,7 @@
 import os
 import random
 
+import allure
 from selenium.webdriver import Keys
 
 from generator.generator import generated_person, generate_subject_list, generated_file
@@ -11,6 +12,7 @@ from pages.base_page import BasePage
 class FormPage(BasePage):
     locators = TestFormPageLocators()
 
+    @allure.step('Filling out the form')
     def filling_out_the_form(self):
 
         person_info = next(generated_person())
@@ -52,6 +54,7 @@ class FormPage(BasePage):
 
         return person_info, subject, file_name
 
+    @allure.step('Getting form result')
     def get_form_result(self):
         data = []
         rows = self.element_are_visible(self.locators.RESULT_TABLE)
@@ -59,6 +62,7 @@ class FormPage(BasePage):
             data.append(row.text)
         return data
 
+    @allure.step('Checking form results')
     def check_form_result(self):
         person_data, subject, file_name = self.filling_out_the_form()
         gender = ['Male', 'Female', 'Other']
